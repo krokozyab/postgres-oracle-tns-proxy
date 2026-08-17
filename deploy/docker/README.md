@@ -67,7 +67,7 @@ changed independently.
 The repository workflow publishes the self-contained database image as:
 
 ```text
-ghcr.io/krokozyab/orapglink-postgres-demo:pg16
+ghcr.io/krokozyab/postgres-oracle-tns-proxy-demo:pg16
 ```
 
 The package is public and can be pulled without GitHub authentication. Compose
@@ -77,7 +77,7 @@ To force the published image, set this in `.env` and run Compose without
 `--build`:
 
 ```sh
-ORAPGLINK_POSTGRES_IMAGE=ghcr.io/krokozyab/orapglink-postgres-demo:pg16
+ORAPGLINK_POSTGRES_IMAGE=ghcr.io/krokozyab/postgres-oracle-tns-proxy-demo:pg16
 ```
 
 ## Reset and safety
