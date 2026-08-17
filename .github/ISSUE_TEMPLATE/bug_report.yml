@@ -1,0 +1,83 @@
+name: Bug report
+description: Something behaved differently than you expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time. This is an **experimental preview**, so
+        please skim [KNOWN_LIMITATIONS.md](https://github.com/krokozyab/postgres-oracle-tns-proxy/blob/master/KNOWN_LIMITATIONS.md)
+        first — a fair number of refusals (`ORA-03001` in particular) are
+        deliberate and documented there.
+
+        The single most useful line in a report is the **exact client version**.
+        Oracle clients differ in wire behaviour between releases, and most of
+        the real bugs found in this project so far were version-specific.
+
+  - type: input
+    id: version
+    attributes:
+      label: orapglink version
+      description: The output of `./orapglink --version`. If it says `dev`, say where the build came from.
+      placeholder: v0.1.0-preview.2
+    validations:
+      required: true
+
+  - type: input
+    id: platform
+    attributes:
+      label: OS and architecture
+      placeholder: Ubuntu 24.04, x86-64 (from the linux_amd64 archive)
+    validations:
+      required: true
+
+  - type: input
+    id: client
+    attributes:
+      label: Client and its exact version
+      description: Not just "JDBC" or "sqlplus" — the version string.
+      placeholder: python-oracledb 3.4.1 thin / ojdbc11 23.5 / sqlplus from Instant Client 23.6 / DATABASE LINK from Oracle 19.19
+    validations:
+      required: true
+
+  - type: input
+    id: postgres
+    attributes:
+      label: PostgreSQL version, and is orafce installed?
+      placeholder: PostgreSQL 16.4, orafce 4.9 installed
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened, and what you expected instead
+      description: The SQL you sent and the error or result you got back, verbatim.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: proxy_log
+    attributes:
+      label: Proxy log
+      description: |
+        The relevant lines from orapglink's own output. If you can reproduce it,
+        restart with `--log-level debug` and include that instead — it logs the
+        parsed client identity, the translated SQL and the backend result shape,
+        which is usually enough to locate the problem without additional
+        low-level diagnostics.
+
+        Please redact hostnames, usernames and any data values you cannot share.
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
+    id: profiles
+    attributes:
+      label: "`./orapglink --profiles` output for your client's dialect (optional)"
+      description: The section for the dialect in question. It says what this build claims and what it does not.
+      render: text
+    validations:
+      required: false

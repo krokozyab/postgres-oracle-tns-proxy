@@ -1,0 +1,15 @@
+orapglink
+Copyright 2026 Sergey Rudenko
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
+
+Third-party components redistributed inside compiled release binaries are
+listed, with their versions and licenses, in THIRD_PARTY_NOTICES.md. Full
+license texts are in the licenses/ directory.
+
+orapglink is an independent, third-party interoperability project. It is not
+affiliated with, endorsed by, sponsored by, or supported by Oracle
+Corporation, and it neither contains nor distributes any Oracle software.
+"Oracle" and other Oracle product names are trademarks or registered
+trademarks of Oracle Corporation and/or its affiliates, used here only
+descriptively.

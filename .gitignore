@@ -1,0 +1,17 @@
+# Local configuration and secrets
+config.env
+.env
+deploy/docker/.env
+
+# Downloaded release artifacts and the Docker build input
+orapglink
+deploy/docker/orapglink
+*.tar.gz
+*.zip
+SHA256SUMS
+
+# Editor and operating-system files
+.DS_Store
+.idea/
+.vscode/
+*.swp

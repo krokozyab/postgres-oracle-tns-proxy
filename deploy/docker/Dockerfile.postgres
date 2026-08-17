@@ -1,0 +1,21 @@
+# PostgreSQL 16 with the orafce extension package installed.
+#
+# orafce is MANDATORY for orapglink (Oracle-semantic NVL/DECODE/ADD_MONTHS/
+# SUBSTR/TO_CHAR/… — see the project's orafce section). The stock postgres:16
+# image does not carry it, so this adds the Debian package. The extension is
+# still CREATEd per-database by the init scripts (initdb/), not here — this
+# layer only makes the package available.
+FROM postgres:16-bookworm
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends postgresql-16-orafce \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY sql/ /opt/orapglink/sql/
+COPY deploy/docker/initdb/ /docker-entrypoint-initdb.d/
+
+RUN chmod 0755 /docker-entrypoint-initdb.d/*.sh
+
+LABEL org.opencontainers.image.source="https://github.com/krokozyab/postgres-oracle-tns-proxy" \
+      org.opencontainers.image.description="PostgreSQL 16 demo database for orapglink, with orafce and Oracle compatibility views" \
+      org.opencontainers.image.licenses="Apache-2.0"

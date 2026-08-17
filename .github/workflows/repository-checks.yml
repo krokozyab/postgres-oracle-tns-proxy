@@ -1,0 +1,34 @@
+name: Repository checks
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  public-surface:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: reject private verification terminology
+        run: |
+          set -euo pipefail
+          if rg -n -i 'captur|byte[- ]exact|golden|reverse.engineer|replay|protocol traces|hex dump' \
+              --hidden --glob '!.git/**' --glob '!.github/workflows/repository-checks.yml' .; then
+            echo 'Public files expose private verification terminology.' >&2
+            exit 1
+          fi
+      - name: reject tracked binaries, archives, and local configuration
+        run: |
+          set -euo pipefail
+          if git ls-files | grep -E '(^|/)(config\.env|\.env|orapglink)$|\.(tar\.gz|zip)$|(^|/)SHA256SUMS$'; then
+            echo 'A generated artifact or local configuration file is tracked.' >&2
+            exit 1
+          fi
+      - name: validate the Docker Compose demo
+        run: docker compose -f deploy/docker/docker-compose.yml config --quiet

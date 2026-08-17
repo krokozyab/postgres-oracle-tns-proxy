@@ -1,0 +1,61 @@
+services:
+  postgres:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.postgres
+    image: ${ORAPGLINK_POSTGRES_IMAGE:-orapglink-postgres-demo:local}
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-appdb}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-orapglink-demo-admin}
+      ORAPGLINK_RUNTIME_PASSWORD: ${ORAPGLINK_RUNTIME_PASSWORD:-orapglink-demo-runtime}
+      ORAPGLINK_INSTALL_PASSWORD: ${ORAPGLINK_INSTALL_PASSWORD:-orapglink-demo-install}
+      ORAPGLINK_LOGICAL_SCHEMA: ${ORAPGLINK_LOGICAL_SCHEMA:-PUBLIC}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB && psql -U $$POSTGRES_USER -d $$POSTGRES_DB -tAc \"SELECT 1 WHERE EXISTS (SELECT FROM pg_extension WHERE extname = 'orafce') AND to_regclass('public.demo_customers') IS NOT NULL\" | grep -qx 1"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    ports:
+      - 127.0.0.1:${ORAPGLINK_DEMO_PG_PORT:-55432}:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  orapglink:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${ORAPGLINK_IMAGE:-orapglink:local}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ORAPGLINK_ORACLE_LISTEN: 0.0.0.0:1521
+      ORAPGLINK_ORACLE_PASSWORD: ${ORAPGLINK_ORACLE_PASSWORD:-orapglink-demo-oracle}
+      ORAPGLINK_POSTGRES_DSN: host=postgres port=5432 dbname=${POSTGRES_DB:-appdb} user=orapglink_runtime password=${ORAPGLINK_RUNTIME_PASSWORD:-orapglink-demo-runtime} sslmode=disable
+      ORAPGLINK_LOGICAL_SCHEMA: ${ORAPGLINK_LOGICAL_SCHEMA:-PUBLIC}
+      ORAPGLINK_PG_SCHEMAS: public
+      ORAPGLINK_DICT_SCHEMA: oradict
+      ORAPGLINK_REQUIRE_ORAFCE: "true"
+    ports:
+      - 127.0.0.1:${ORAPGLINK_DEMO_TNS_PORT:-1521}:1521
+    restart: unless-stopped
+
+  smoke:
+    profiles: [test]
+    build:
+      context: .
+      dockerfile: Dockerfile.smoke
+    depends_on:
+      postgres:
+        condition: service_healthy
+      orapglink:
+        condition: service_started
+    environment:
+      ORAPGLINK_HOST: orapglink
+      ORAPGLINK_PORT: "1521"
+      ORAPGLINK_SERVICE: ${ORAPGLINK_LOGICAL_SCHEMA:-PUBLIC}
+      ORAPGLINK_PASSWORD: ${ORAPGLINK_ORACLE_PASSWORD:-orapglink-demo-oracle}
+
+volumes:
+  postgres-data:

@@ -1,0 +1,7 @@
+FROM python:3.11-slim-bookworm
+
+RUN pip install --no-cache-dir cryptography==43.0.3 oracledb==3.4.1
+COPY smoke.py /opt/orapglink/smoke.py
+
+USER 65534:65534
+ENTRYPOINT ["python", "/opt/orapglink/smoke.py"]
