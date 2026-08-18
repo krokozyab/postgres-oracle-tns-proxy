@@ -20,6 +20,8 @@
 it as if they were connecting to an Oracle service; the proxy translates the
 supported SQL subset and executes it against PostgreSQL.
 
+[![GitHub Downloads](https://img.shields.io/github/downloads/krokozyab/postgres-oracle-tns-proxy/total?style=for-the-badge&logo=github)](https://github.com/krokozyab/postgres-oracle-tns-proxy/releases)
+
 > This repository is the distribution and documentation repository. It does
 > **not** contain the product source code. Prebuilt binaries and checksums are
 > published on the [Releases](https://github.com/krokozyab/postgres-oracle-tns-proxy/releases)
