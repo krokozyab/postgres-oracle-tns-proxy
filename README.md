@@ -15,7 +15,13 @@
 </div>
 
 <br />
+
+
+
 [![GitHub Downloads](https://img.shields.io/github/downloads/krokozyab/postgres-oracle-tns-proxy/total?style=for-the-badge&logo=github)](https://github.com/krokozyab/postgres-oracle-tns-proxy/releases)
+
+
+
 `orapglink` is a read-only compatibility proxy. Oracle-facing tools connect to
 it as if they were connecting to an Oracle service; the proxy translates the
 supported SQL subset and executes it against PostgreSQL.
