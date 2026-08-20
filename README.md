@@ -18,7 +18,7 @@
 
 
 
-[![GitHub Downloads](https://img.shields.io/github/downloads/krokozyab/postgres-oracle-tns-proxy/total?style=for-the-badge&logo=github)](https://github.com/krokozyab/postgres-oracle-tns-proxy/releases)
+<!--[![GitHub Downloads](https://img.shields.io/github/downloads/krokozyab/postgres-oracle-tns-proxy/total?style=for-the-badge&logo=github)](https://github.com/krokozyab/postgres-oracle-tns-proxy/releases)-->
 
 
 
